@@ -1,15 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/cppFiles/class.cc to edit this template
- */
-
-/* 
- * File:   cPilha.cpp
- * Author: aluno
- * 
- * Created on 17 de novembro de 2023, 09:54
- */
-
 #include "cPilha.h"
 #include <iostream>
 
