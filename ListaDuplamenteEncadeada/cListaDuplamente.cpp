@@ -1,15 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/cppFiles/class.cc to edit this template
- */
-
-/* 
- * File:   cListaDuplamente.cpp
- * Author: aluno
- * 
- * Created on 24 de novembro de 2023, 09:08
- */
-
 #include "cListaDuplamente.h"
 #include <iostream>
 
@@ -82,4 +70,36 @@ void cListaDuplamente::listar() {
     }
 }
 
+struct no* cListaDuplamente::pesquisar(int chave) {
+    for (this->aux = this->inicio; this->aux != NULL; this->aux = this->aux->prox) {
+        if (this->aux->num == chave) {
+            return this->aux;
+        }
+    }
 
+    return NULL;
+
+}
+
+void cListaDuplamente::remover() {
+
+    int chave;
+    cout << "Informe o elemento que deseja remover: ";
+    cin >> chave;
+
+    this->aux = this->pesquisar(chave);
+
+    if (this->aux == this->inicio) {
+        this->inicio = this->inicio->prox;
+        this->inicio->ant = NULL;
+    } else if (this->aux == this->fim) {
+        this->fim = this->fim->ant;
+        this->fim->prox = NULL;
+    } else {
+        this->aux->ant->prox = this->aux->prox;
+        this->aux->prox->ant = this->aux->ant;
+    }
+
+    free(this->aux);
+
+}
