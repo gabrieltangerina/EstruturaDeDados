@@ -1,42 +1,24 @@
-#include "cPilha.h"
-#include <iostream>
+void Pilha::menu() {
+    int escolha;
 
-using namespace std;
+    cout << endl;
+    cout << "[1] - Adicionar elemento" << endl;
+    cout << "[2] - Remover elemento" << endl;
+    cout << "[3] - Listar elementos" << endl;
+    cout << "[4] - Para pesquisar" << endl;
+    cout << "[5] - Para retornar elemento do meio" << endl;
+    cout << "[6] - Para retornar endereço elemento do meio" << endl;
+    cout << "[0] - Sair " << endl;
+    cout << endl;
+    cin >> escolha;
 
-cPilha::cPilha() {
-    this->aux = NULL;
-    this->topo = NULL;
-    this->fim = NULL;
-}
-
-cPilha::cPilha(const cPilha& orig) {
-}
-
-cPilha::~cPilha() {
-}
-
-void cPilha::menu() {
-
-    int opc;
-    cout << "\n=========== MENU =========== " << endl;
-    cout << "[1] - Empilhar " << endl;
-    cout << "[2] - Desempilhar" << endl;
-    cout << "[3] - Listar " << endl;
-    cout << "[4] - Pesquisar " << endl;
-    cout << "[5] - Valor do meio da pilha " << endl;
-    cout << "[6] - Endereço do meio da pilha " << endl;
-    cout << "[0] - Sair" << endl;
-    cout << "============================" << endl;
-    cout << "Opcao: ";
-    cin >> opc;
-
-    switch (opc) {
+    switch (escolha) {
         case 1:
-            this->empilhar();
+            this->adicionar();
             this->menu();
             break;
         case 2:
-            this->desempilhar();
+            this->remover();
             this->menu();
             break;
         case 3:
@@ -48,118 +30,101 @@ void cPilha::menu() {
             this->menu();
             break;
         case 5:
-            cout << this->retonarElementoMeio();
+            this->retonarElementoMeio();
             this->menu();
             break;
         case 6:
-            cout << this->retonarEnderecoMeio();
+            this->retornaEnderecoMeio();
             this->menu();
             break;
         case 0:
-            cout << "Saindo." << endl;
+            cout << "Saindo..." << endl;
             break;
-        default:
-            cout << "Opcao Invalida. Insira novamente" << endl;
-            this->menu();
     }
-
 }
 
-void cPilha::empilhar() {
-
+void Pilha::adicionar() {
     int num;
-
-    cout << "Digite o valor para empilhar: ";
+    cout << "Informe o número que deseja adicionar na PILHA: ";
     cin >> num;
 
-    this->aux = (struct no*) malloc(sizeof (aux));
-    this->aux->ant = NULL;
+    this->aux = (struct no*) malloc(sizeof (this->aux));
 
     this->aux->num = num;
     this->aux->ant = this->topo;
     this->topo = this->aux;
-
 }
 
-void cPilha::listar() {
-    for (this->aux = this->topo; this->aux != NULL; this->aux = this->aux->ant) {
-        cout << this->aux->num << " - ";
+void Pilha::remover() {
+    if (this->topo != NULL) {
+        this->aux = this->topo;
+        this->topo = this->topo->ant;
+        free(this->aux);
+        cout << "Elemento desempilhado com SUCESSO!" << endl;
     }
+}
 
+void Pilha::listar(){
+    cout << "Elementos: ";
+    for(this->aux = this->topo; this->aux != NULL; this->aux = this->aux->ant){
+        cout << this->aux->num << "   ";
+    }
     cout << endl;
 }
 
-void cPilha::desempilhar() {
-    
-
-    if (vazio(this->topo)) {
-        this->aux = this->topo;
-        this->topo = this->topo->ant;
-        cout << "\nO elemento desempilhado foi: " << this->aux->num << endl;
-        free(this->aux);
-    }
-}
-
-void cPilha::pesquisar(){
-    int chave, posicao = 1;
-    
-    cout << "Informe o valor para pesquisar: ";
+void Pilha::pesquisar(){
+    int chave, posicao = 0;
+    bool encontrado = false;
+    cout << "Informe o elemento para pesquisar: ";
     cin >> chave;
     
     for(this->aux = this->topo; this->aux != NULL; this->aux = this->aux->ant){
-        if(this->aux->num == chave){
-            cout << "Elemento encontrado na " << posicao << " posição" << endl;
-        }
         posicao++;
-    }
-}
-
-bool cPilha::vazio(no *structEnviado) {
-    if (structEnviado == NULL) {
-        return false;
-    } else {
-        return true;
-    }
-}
-
-int cPilha::calcularMeio(){
-        int i = 0;
-
-    for (this->aux = this->topo; this->aux != NULL; this->aux = this->aux->ant) {
-        if (this->vazio(this->aux)) {
-            i++;
+        if(chave == this->aux->num){
+            cout << "Elemento encontrado na posição " << posicao << endl;
+            encontrado = true;
         }
     }
-
-    int meio = i / 2;
-
-    return meio;
-}
-
-no* cPilha::retonarEnderecoMeio() {
-
-    int meio = this->calcularMeio();
-    int j = 0;
-
-    for (this->aux = this->topo; this->aux != NULL; this->aux = this->aux->ant) {
-        if (j == meio) {
-            return this->aux;
-        } else {
-            j++;
-        }
+    
+    if(!encontrado){
+        cout << "Elemento não encontrado";
     }
 }
 
-int cPilha::retonarElementoMeio() {
+int Pilha::calcularMeio(){
+    int contador = 0;
+    
+    for(this->aux = this->topo; this->aux != NULL; this->aux = this->aux->ant){
+        contador++;
+    }
+    
+    int meio = contador / 2;
+    return meio+1;
+}
 
+int Pilha::retonarElementoMeio(){
     int meio = this->calcularMeio();
-    int j = 0;
-
-    for (this->aux = this->topo; this->aux != NULL; this->aux = this->aux->ant) {
-        if (j == meio) {
+    int contador = 0;
+    
+    for(this->aux = this->topo; this->aux != NULL; this->aux = this->aux->ant){
+        contador++;
+        if(contador == meio){
+            cout << "Elemento meio: " << this->aux->num << endl;
             return this->aux->num;
-        } else {
-            j++;
+        }
+    }
+    
+}
+
+no* Pilha::retornaEnderecoMeio(){
+    int meio = this->calcularMeio();
+    int contador = 0;
+    
+    for(this->aux = this->topo; this->aux != NULL; this->aux = this->aux->ant){
+        contador++;
+        if(contador == meio){
+            cout << "Endereço meio: " << this->aux << endl;
+            return this->aux;
         }
     }
 }
